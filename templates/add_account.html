@@ -1,31 +1,35 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Add Game Account</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
 
 <h2>Add Game Account</h2>
 
 <form method="POST">
 
-Game Name:<br>
-<input type="text" name="game_name"><br><br>
+<p>Game Name</p>
+<input type="text" name="game_name">
 
-Game ID:<br>
-<input type="text" name="game_id"><br><br>
+<p>Game ID</p>
+<input type="text" name="game_id">
 
-Game Password:<br>
-<input type="text" name="game_password"><br><br>
+<p>Password</p>
+<input type="text" name="game_password">
 
-Note:<br>
-<input type="text" name="note"><br><br>
+<p>Note</p>
+<input type="text" name="note">
 
-<button type="submit">Save</button>
+<br><br>
+
+<button type="submit">Add</button>
+
+<a href="/dashboard">
+<button type="button">Back</button>
+</a>
 
 </form>
 
-<a href="/dashboard">Back</a>
+</div>
 
-</body>
-</html>
+{% endblock %}

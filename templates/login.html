@@ -1,23 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Login</title>
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="card">
 
 <h2>Login</h2>
 
 <form method="POST">
-    Username:<br>
-    <input type="text" name="username"><br><br>
 
-    Password:<br>
-    <input type="password" name="password"><br><br>
+<label>Username</label>
+<input type="text" name="username">
 
-    <button type="submit">Login</button>
+<label>Password</label>
+<input type="password" name="password">
+
+<button type="submit">Login</button>
+
 </form>
 
-<a href="/">Back</a>
+<p>
+Don't have account?
+<a href="/register">Register</a>
+</p>
 
-</body>
-</html>
+</div>
+
+{% endblock %}

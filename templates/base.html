@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+
+<title>My Game Accounts</title>
+
+<style>
+
+/* ---------- Global Reset ---------- */
+
+*{
+box-sizing:border-box;
+margin:0;
+padding:0;
+}
+
+/* ---------- Body ---------- */
+
+body{
+font-family:Arial;
+background:#1e1e2f;
+color:white;
+margin:40px;
+}
+
+/* ---------- Container ---------- */
+
+.container{
+max-width:900px;
+margin:auto;
+}
+
+/* ---------- Header ---------- */
+
+h1{
+color:#4da6ff;
+}
+
+.topbar{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:40px;
+}
+
+a{
+color:#4da6ff;
+text-decoration:none;
+}
+
+/* ---------- Card ---------- */
+
+.card{
+background:#2a2a40;
+padding:30px;
+border-radius:10px;
+width:350px;
+margin:auto;
+box-shadow:0 0 10px rgba(0,0,0,0.3);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+box-shadow:0 10px 25px rgba(0,0,0,0.4);
+}
+
+.card h2{
+text-align:center;
+margin-bottom:20px;
+}
+
+/* ---------- Form ---------- */
+
+label{
+display:block;
+margin-top:10px;
+font-size:14px;
+color:#ccc;
+}
+
+input{
+width:100%;
+padding:10px;
+margin-top:5px;
+margin-bottom:12px;
+border-radius:6px;
+border:none;
+outline:none;
+background:#f1f1f1;
+}
+
+button{
+padding:8px 14px;
+border:none;
+background:#4da6ff;
+color:white;
+border-radius:5px;
+cursor:pointer;
+}
+
+button:hover{
+background:#3399ff;
+}
+
+/* ---------- Toast Notification ---------- */
+
+#toast-container{
+position:fixed;
+top:20px;
+right:20px;
+display:flex;
+flex-direction:column;
+gap:10px;
+z-index:999;
+}
+
+.toast{
+min-width:260px;
+padding:14px 18px;
+border-radius:8px;
+color:white;
+font-size:14px;
+box-shadow:0 4px 20px rgba(0,0,0,0.3);
+animation:slideIn 0.4s ease;
+overflow:hidden;
+position:relative;
+}
+
+/* Colors */
+
+.toast.success{
+background:#2ecc71;
+}
+
+.toast.error{
+background:#e74c3c;
+}
+
+.toast.warning{
+background:#f39c12;
+}
+
+/* Progress bar */
+
+.toast::after{
+content:"";
+position:absolute;
+bottom:0;
+left:0;
+height:4px;
+width:100%;
+background:rgba(255,255,255,0.7);
+animation:progress 5s linear forwards;
+}
+
+/* ---------- Animations ---------- */
+
+@keyframes slideIn{
+from{
+transform:translateX(120%);
+opacity:0;
+}
+to{
+transform:translateX(0);
+opacity:1;
+}
+}
+
+@keyframes fadeOut{
+from{
+opacity:1;
+}
+to{
+opacity:0;
+transform:translateX(120%);
+}
+}
+
+@keyframes progress{
+from{
+width:100%;
+}
+to{
+width:0%;
+}
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="topbar">
+
+<h1>My Game Accounts</h1>
+
+{% if session.get("user") and request.path != "/" %}
+
+<div>
+Welcome, {{ session['user'] }} |
+<a href="/logout">Logout</a>
+</div>
+{% endif %}
+
+</div>
+
+{% block content %}
+{% endblock %}
+
+</div>
+
+<!-- Toast Messages -->
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+{% if messages %}
+
+<div id="toast-container">
+{% for category, message in messages %}
+<div class="toast {{ category }}">
+{{ message }}
+</div>
+{% endfor %}
+</div>
+{% endif %}
+{% endwith %}
+
+<script>
+
+setTimeout(function(){
+
+let toasts=document.querySelectorAll(".toast");
+
+toasts.forEach(function(toast){
+
+toast.style.animation="fadeOut 0.5s forwards";
+
+setTimeout(function(){
+toast.remove();
+},500);
+
+});
+
+},5000);
+
+</script>
+
+</body>
+</html>
