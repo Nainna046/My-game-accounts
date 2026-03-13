@@ -1,10 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for, session, flash
+import os
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
-app.secret_key = "mysecretkey"
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+os.makedirs("instance", exist_ok=True)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/database.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
