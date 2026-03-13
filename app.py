@@ -1,13 +1,18 @@
 from flask import Flask, render_template, request, redirect, url_for, session, flash
-import os
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import os
 
 app = Flask(__name__)
 app.secret_key = "mysecretkey"
+
+# Create instance folder
 os.makedirs("instance", exist_ok=True)
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///instance/database.db'
+# Database
+basedir = os.path.abspath(os.path.dirname(__file__))
+db_path = os.path.join(basedir, "instance", "database.db")
+
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{db_path}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
@@ -56,7 +61,6 @@ def login():
         username = request.form["username"].strip()
         password = request.form["password"].strip()
 
-        # check empty
         if not username or not password:
             flash("⚠ Please enter username and password", "warning")
             return redirect(url_for("login"))
@@ -70,10 +74,9 @@ def login():
             flash("Login successful 🎉", "success")
 
             return redirect(url_for("dashboard"))
-        else:
-            flash("❌ Username or Password incorrect", "error")
 
-            return redirect(url_for("login"))
+        flash("❌ Username or Password incorrect", "error")
+        return redirect(url_for("login"))
 
     return render_template("login.html")
 
@@ -84,7 +87,6 @@ def login():
 def logout():
 
     session.clear()
-
     flash("Logged out successfully", "success")
 
     return redirect(url_for("login"))
@@ -103,7 +105,6 @@ def register():
         username = request.form["username"].strip()
         password = request.form["password"].strip()
 
-        # check empty
         if not username or not password:
             flash("⚠ Username and password required", "warning")
             return redirect(url_for("register"))
@@ -125,6 +126,7 @@ def register():
 
     return render_template("register.html")
 
+
 # ---------------- DASHBOARD ----------------
 
 @app.route("/dashboard")
@@ -144,8 +146,6 @@ def dashboard():
         ).all()
     else:
         accounts = GameAccount.query.filter_by(user_id=user_id).all()
-
-    # -------- Stats --------
 
     total_accounts = GameAccount.query.filter_by(user_id=user_id).count()
 
@@ -169,7 +169,7 @@ def dashboard():
 
 # ---------------- ADD ACCOUNT ----------------
 
-@app.route("/add", methods=["GET", "POST"])
+@app.route("/add", methods=["GET","POST"])
 def add_account():
 
     if "user_id" not in session:
@@ -218,7 +218,7 @@ def delete_account(id):
 
 # ---------------- EDIT ACCOUNT ----------------
 
-@app.route("/edit/<int:id>", methods=["GET", "POST"])
+@app.route("/edit/<int:id>", methods=["GET","POST"])
 def edit_account(id):
 
     if "user_id" not in session:
@@ -245,10 +245,13 @@ def edit_account(id):
     return render_template("edit_account.html", account=account)
 
 
-# ---------------- RUN APP ----------------
+# ---------------- INIT DATABASE ----------------
+
+with app.app_context():
+    db.create_all()
+
+
+# ---------------- RUN ----------------
 
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
-
     app.run(debug=True)
