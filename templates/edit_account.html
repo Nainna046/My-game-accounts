@@ -1,0 +1,19 @@
+<h2>Edit Game Account</h2>
+
+<form method="POST">
+Game Name:<br>
+<input type="text" name="game_name" value="{{ account.game_name }}"><br><br>
+
+Game ID:<br>
+<input type="text" name="game_id" value="{{ account.game_id }}"><br><br>
+
+Game Password:<br>
+<input type="text" name="game_password" value="{{ account.game_password }}"><br><br>
+
+Note:<br>
+<input type="text" name="note" value="{{ account.note }}"><br><br>
+
+<button type="submit">Update</button>
+</form>
+
+<a href="/dashboard">Back</a>

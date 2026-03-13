@@ -1,0 +1,37 @@
+<form method="GET">
+<input type="text" name="search" placeholder="Search game">
+<button type="submit">Search</button>
+</form>
+<h1>My Game Accounts</h1>
+
+<a href="/add">Add Game Account</a>
+
+<table border="1">
+
+<tr>
+<th>Game</th>
+<th>ID</th>
+<th>Password</th>
+<th>Note</th>
+<th>Action</th>
+</tr>
+
+{% for acc in accounts %}
+<td>
+<a href="/edit/{{ acc.id }}">Edit</a> |
+<a href="/delete/{{ acc.id }}">Delete</a>
+</td>
+
+<tr>
+<td>{{ acc.game_name }}</td>
+<td>{{ acc.game_id }}</td>
+<td>{{ acc.game_password }}</td>
+<td>{{ acc.note }}</td>
+<td>
+<a href="/delete/{{ acc.id }}">Delete</a>
+</td>
+</tr>
+
+{% endfor %}
+
+</table>
